@@ -8,7 +8,7 @@ window.addEventListener('load', function() {
         checkScrollReveal();
         initGlitchText();
         initMatrixRain(); // Start Data Rain
-    }, 1800);
+    }, 650);
 });
 
 // ==========================================
