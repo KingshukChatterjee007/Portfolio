@@ -6,12 +6,74 @@ window.addEventListener('load', function() {
             loadingScreen.classList.add('hidden');
         }
         checkScrollReveal();
-        initGlitchText(); // Setup CSS glitch
+        initGlitchText();
+        initMatrixRain(); // Start Data Rain
     }, 1800);
 });
 
 // ==========================================
-//  1. AUDIO VISUALIZER LOGIC
+//  1. DATA RAIN EFFECT (NEW)
+// ==========================================
+function initMatrixRain() {
+    const canvas = document.getElementById('matrix-rain');
+    if(!canvas) return;
+    
+    const ctx = canvas.getContext('2d');
+    let width, height;
+    
+    // Resize handling
+    function resize() {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+    
+    // Configuration
+    const columns = Math.floor(width / 20); // 20px char width
+    const drops = [];
+    const chars = "0101012345789ABCDEFGHIJKLMNOPQRSTUVWXYZ<>/\\@#$%^&*";
+    
+    // Initialize drops
+    for(let i = 0; i < columns; i++) {
+        drops[i] = Math.random() * -100; // Start above screen randomly
+    }
+    
+    function draw() {
+        // Transparent black overlay to create "trail" effect
+        // Lower opacity = longer trails
+        ctx.fillStyle = "rgba(5, 5, 5, 0.05)"; 
+        ctx.fillRect(0, 0, width, height);
+        
+        ctx.font = "14px 'IBM Plex Mono'";
+        
+        for(let i = 0; i < drops.length; i++) {
+            const text = chars.charAt(Math.floor(Math.random() * chars.length));
+            
+            // Alternate between theme colors for characters
+            if(Math.random() > 0.95) {
+                ctx.fillStyle = "#ff0055"; // Pink Accents
+            } else {
+                ctx.fillStyle = "#00f3ff"; // Cyan Main
+            }
+            
+            ctx.fillText(text, i * 20, drops[i] * 20);
+            
+            // Reset drop if it goes off screen
+            if(drops[i] * 20 > height && Math.random() > 0.975) {
+                drops[i] = 0;
+            }
+            
+            drops[i]++;
+        }
+        requestAnimationFrame(draw);
+    }
+    
+    draw();
+}
+
+// ==========================================
+//  2. AUDIO VISUALIZER LOGIC
 // ==========================================
 let musicPlaying = false;
 let audioContext;
@@ -108,7 +170,7 @@ function toggleMusic() {
 }
 
 // ==========================================
-//  2. GRANULAR SCROLL REVEAL
+//  3. GRANULAR SCROLL REVEAL
 // ==========================================
 const revealElements = document.querySelectorAll('section, .project-card, .skill-item, .timeline-item');
 
@@ -126,19 +188,18 @@ function checkScrollReveal() {
 window.addEventListener('scroll', checkScrollReveal);
 
 // ==========================================
-//  3. SETUP FOR CSS GLITCH
+//  4. SETUP FOR CSS GLITCH
 // ==========================================
 function initGlitchText() {
     const headers = document.querySelectorAll('h1, h2');
     headers.forEach(header => {
-        // This attribute is needed for the CSS ::before/::after content to work
         header.setAttribute('data-text', header.innerText);
         header.classList.add('glitch-text');
     });
 }
 
 // ==========================================
-//  4. STANDARD UTILS
+//  5. STANDARD UTILS
 // ==========================================
 const form = document.getElementById('contact-form');
 const formStatus = document.getElementById('form-status');
