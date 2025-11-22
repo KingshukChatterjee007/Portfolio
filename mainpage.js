@@ -6,6 +6,7 @@ window.addEventListener('load', function() {
             loadingScreen.classList.add('hidden');
         }
         checkScrollReveal();
+        initGlitchText(); // Setup CSS glitch
     }, 1800);
 });
 
@@ -107,56 +108,34 @@ function toggleMusic() {
 }
 
 // ==========================================
-//  2. SCROLL REVEAL
+//  2. GRANULAR SCROLL REVEAL
 // ==========================================
-const revealElements = document.querySelectorAll('section');
+const revealElements = document.querySelectorAll('section, .project-card, .skill-item, .timeline-item');
 
 function checkScrollReveal() {
-    const triggerBottom = window.innerHeight * 0.85;
+    const triggerBottom = window.innerHeight * 0.9; 
+    
     revealElements.forEach(box => {
         const boxTop = box.getBoundingClientRect().top;
+        
         if(boxTop < triggerBottom) {
-            box.classList.add('visible-section');
+            box.classList.add('reveal-visible');
         }
     });
 }
 window.addEventListener('scroll', checkScrollReveal);
 
 // ==========================================
-//  3. HACKER TEXT EFFECT (Only for Headers now)
+//  3. SETUP FOR CSS GLITCH
 // ==========================================
-const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()_+-=[]{}|;':,./<>?";
-
-function hackerEffect(event) {
-    let iterations = 0;
-    const target = event.target;
-    
-    // Only apply to headers, not skill items anymore
-    let textElement = target;
-    if (target.tagName !== 'H1' && target.tagName !== 'H2') return; 
-
-    const originalText = textElement.dataset.value || textElement.innerText;
-    
-    if (!textElement.dataset.value) textElement.dataset.value = originalText;
-    
-    const interval = setInterval(() => {
-        textElement.innerText = originalText.split("")
-            .map((letter, index) => {
-                if(index < iterations) return originalText[index];
-                return letters[Math.floor(Math.random() * letters.length)];
-            })
-            .join("");
-        
-        if(iterations >= originalText.length) clearInterval(interval);
-        iterations += 1 / 3;
-    }, 30);
+function initGlitchText() {
+    const headers = document.querySelectorAll('h1, h2');
+    headers.forEach(header => {
+        // This attribute is needed for the CSS ::before/::after content to work
+        header.setAttribute('data-text', header.innerText);
+        header.classList.add('glitch-text');
+    });
 }
-
-// Attach to Main Title and Headers ONLY
-document.querySelector('h1').onmouseover = hackerEffect;
-document.querySelectorAll('h2').forEach(header => header.onmouseover = hackerEffect);
-
-// REMOVED: The listener for .skill-item is gone.
 
 // ==========================================
 //  4. STANDARD UTILS
@@ -222,19 +201,5 @@ document.addEventListener('keydown', function(e) {
         document.documentElement.style.setProperty('--neon-pink', '#00ff00');
     }
 });
-
-setInterval(() => {
-    const elements = document.querySelectorAll('h2, h3');
-    if(elements.length > 0) {
-        const randomElement = elements[Math.floor(Math.random() * elements.length)];
-        if (Math.random() > 0.98) {
-            const originalShadow = randomElement.style.textShadow;
-            randomElement.style.textShadow = '3px 3px 0 rgba(255,0,85,0.8), -3px -3px 0 rgba(0,243,255,0.8)';
-            setTimeout(() => {
-                randomElement.style.textShadow = originalShadow;
-            }, 100);
-        }
-    }
-}, 3000);
 
 console.log('%c✓ SYSTEM ONLINE.', 'color: #00f3ff; font-weight: bold; font-family: monospace;');
