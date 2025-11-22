@@ -18,7 +18,6 @@
 
     <!-- Music Toggle & Audio Source -->
     <div class="music-toggle" onclick="toggleMusic()">
-        <!-- Visualizer Bars -->
         <div class="music-bars">
             <div class="bar"></div>
             <div class="bar"></div>
@@ -27,15 +26,18 @@
         <span id="music-label">AUDIO OFF</span>
     </div>
     
-    <!-- Audio File Source -->
-    <audio id="bg-music" loop>
+    <!-- IMPORTANT: Ensure 'cyberpunk_music.mp3' exists -->
+    <!-- 'crossorigin' is needed for Web Audio API if hosted externally, good practice to include -->
+    <audio id="bg-music" loop crossorigin="anonymous">
         <source src="cyberpunk_music.mp3" type="audio/mp3">
     </audio>
+
+    <!-- NEW: Visualizer Canvas -->
+    <canvas id="audio-visualizer"></canvas>
 
     <div class="container">
         <!-- Header -->
         <header>
-            <!-- CHANGED: Simplified text as requested -->
             <div class="terminal-prompt">welcome</div>
             <h1>KINGSHUK CHATTERJEE</h1>
             <div class="tagline">Elegance in code, clarity in design, beauty in form.</div>
@@ -277,7 +279,7 @@
 ╚═══════════════════════════════════════╝</div>
             <p>© 2025 Kingshuk Chatterjee – All Rights Reserved</p>
             <p style="color: var(--neon-cyan); font-size: 12px; margin-top: 10px;">
-                System Status: ONLINE | Version: 2.1.0 | Last Updated: 2025.11.23
+                System Status: ONLINE | Version: 2.1.1 | Last Updated: 2025.11.23
             </p>
         </footer>
     </div>

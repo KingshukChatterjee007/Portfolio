@@ -5,20 +5,99 @@ window.addEventListener('load', function() {
         if(loadingScreen) {
             loadingScreen.classList.add('hidden');
         }
-        // Trigger reveal for sections already in view on load
         checkScrollReveal();
     }, 1800);
 });
 
 // ==========================================
-//  1. ROBUST MUSIC LOGIC
+//  1. AUDIO CONTEXT & VISUALIZER
 // ==========================================
 let musicPlaying = false;
+let audioContext;
+let analyser;
+let source;
+let canvas, ctx;
+
+function setupAudioContext() {
+    if (audioContext) return;
+
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    audioContext = new AudioContext();
+    
+    const audioTrack = document.getElementById('bg-music');
+    
+    // Connect audio element to context
+    source = audioContext.createMediaElementSource(audioTrack);
+    analyser = audioContext.createAnalyser();
+    
+    source.connect(analyser);
+    analyser.connect(audioContext.destination);
+    
+    // Configure analyser
+    analyser.fftSize = 256;
+    
+    // Setup Canvas
+    canvas = document.getElementById('audio-visualizer');
+    ctx = canvas.getContext('2d');
+    
+    // Handle resize
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+    
+    // Start drawing loop
+    renderFrame();
+}
+
+function resizeCanvas() {
+    if(canvas) {
+        canvas.width = window.innerWidth;
+        canvas.height = 200; // Match CSS height
+    }
+}
+
+function renderFrame() {
+    requestAnimationFrame(renderFrame);
+    
+    if (!analyser) return;
+    
+    const bufferLength = analyser.frequencyBinCount;
+    const dataArray = new Uint8Array(bufferLength);
+    
+    analyser.getByteFrequencyData(dataArray);
+    
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    const barWidth = (canvas.width / bufferLength) * 2.5;
+    let barHeight;
+    let x = 0;
+    
+    for (let i = 0; i < bufferLength; i++) {
+        barHeight = dataArray[i] / 1.5; // Scale height
+        
+        // Cyberpunk Gradient Colors
+        const gradient = ctx.createLinearGradient(0, canvas.height - barHeight, 0, canvas.height);
+        gradient.addColorStop(0, '#00f3ff'); // Cyan
+        gradient.addColorStop(1, '#bc13fe'); // Purple
+        
+        ctx.fillStyle = gradient;
+        ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
+        
+        x += barWidth + 1;
+    }
+}
 
 function toggleMusic() {
     const audioTrack = document.getElementById('bg-music');
     const musicLabel = document.getElementById('music-label');
     const musicBtn = document.querySelector('.music-toggle');
+    
+    // Initialize Context on first click (browser requirement)
+    setupAudioContext();
+    
+    // Resume context if suspended (Chrome policy)
+    if (audioContext.state === 'suspended') {
+        audioContext.resume();
+    }
     
     musicPlaying = !musicPlaying;
     
@@ -28,17 +107,7 @@ function toggleMusic() {
         
         if(audioTrack) {
             audioTrack.volume = 0.3;
-            var playPromise = audioTrack.play();
-            
-            if (playPromise !== undefined) {
-                playPromise.then(_ => { console.log("Audio started"); })
-                .catch(error => {
-                    console.log("Audio error:", error);
-                    alert("⚠ Audio Error: Ensure 'cyberpunk_music.mp3' is uploaded.");
-                });
-            }
-        } else {
-            alert("Error: <audio> tag not found");
+            audioTrack.play().catch(e => console.log("Play error:", e));
         }
     } else {
         musicLabel.textContent = 'AUDIO OFF';
@@ -53,7 +122,7 @@ function toggleMusic() {
 const revealElements = document.querySelectorAll('section');
 
 function checkScrollReveal() {
-    const triggerBottom = window.innerHeight * 0.85; // Trigger when 85% down the viewport
+    const triggerBottom = window.innerHeight * 0.85;
     
     revealElements.forEach(box => {
         const boxTop = box.getBoundingClientRect().top;
@@ -76,28 +145,21 @@ function hackerEffect(event) {
     const target = event.target;
     const originalText = target.dataset.value || target.innerText;
     
-    // Store original text in data-attribute if not present, so we don't lose it
     if (!target.dataset.value) target.dataset.value = originalText;
     
     const interval = setInterval(() => {
         target.innerText = originalText.split("")
             .map((letter, index) => {
-                if(index < iterations) {
-                    return originalText[index];
-                }
+                if(index < iterations) return originalText[index];
                 return letters[Math.floor(Math.random() * letters.length)];
             })
             .join("");
         
-        if(iterations >= originalText.length) {
-            clearInterval(interval);
-        }
-        
+        if(iterations >= originalText.length) clearInterval(interval);
         iterations += 1 / 3;
     }, 30);
 }
 
-// Attach effect to Main Title and Section Headers
 document.querySelector('h1').onmouseover = hackerEffect;
 document.querySelectorAll('h2').forEach(header => {
     header.onmouseover = hackerEffect;
@@ -105,7 +167,7 @@ document.querySelectorAll('h2').forEach(header => {
 
 
 // ==========================================
-//  4. STANDARD FUNCTIONALITY (Form, Scroll)
+//  4. STANDARD FUNCTIONALITY
 // ==========================================
 
 // Contact Form
@@ -174,7 +236,7 @@ document.addEventListener('keydown', function(e) {
     }
 });
 
-// Glitch Effect (Interval)
+// Glitch Effect
 setInterval(() => {
     const elements = document.querySelectorAll('h2, h3');
     if(elements.length > 0) {
@@ -189,4 +251,4 @@ setInterval(() => {
     }
 }, 3000);
 
-console.log('%c✓ SYSTEM UPGRADE COMPLETE.', 'color: #00f3ff; font-weight: bold; font-family: monospace;');
+console.log('%c✓ AUDIO VISUALIZER ONLINE.', 'color: #00f3ff; font-weight: bold; font-family: monospace;');
