@@ -336,7 +336,7 @@ h2 {
     border: 1px solid rgba(255, 255, 255, 0.1);
     padding: 25px;
     position: relative;
-    transition: transform 0.2s ease, box-shadow 0.2s ease; 
+    transition: all 0.3s ease-in-out; /* Smoother transition */
     cursor: pointer;
     overflow: hidden;
 }
@@ -354,26 +354,16 @@ h2 {
     transition: transform 0.3s ease;
 }
 
-/* Glitch Hover Effect for Cards */
+/* UPDATED: Smooth Hover Effect (No more shaking) */
 .project-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-    border-color: var(--neon-purple);
-    background: rgba(255, 255, 255, 0.05);
-    animation: glitch-skew 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both infinite;
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5), 0 0 15px var(--neon-purple);
+    border-color: var(--neon-cyan);
+    background: rgba(255, 255, 255, 0.08);
 }
 
 .project-card:hover::before {
     transform: scaleX(1);
-}
-
-@keyframes glitch-skew {
-    0% { transform: translate(0) }
-    20% { transform: translate(-1px, 1px) }
-    40% { transform: translate(-1px, -1px) }
-    60% { transform: translate(1px, 1px) }
-    80% { transform: translate(1px, -1px) }
-    100% { transform: translate(0) }
 }
 
 .project-card h3 {
