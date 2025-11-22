@@ -3,30 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kingshuk Chatterjee - Portfolio Terminal</title>
+    <title>Kingshuk Chatterjee - Cyberpunk Portfolio</title>
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=VT323&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="mainpage.css">
 </head>
 <body>
+    <!-- Loading Screen -->
     <div id="loading-screen">
-        <div class="boot-text" style="animation-delay: 0s;">SYSTEM BOOT...</div>
-        <div class="boot-text" style="animation-delay: 0.3s;">INITIALIZING PORTFOLIO.EXE...</div>
-        <div class="boot-text" style="animation-delay: 0.6s;">LOADING PROJECTS DATABASE...</div>
-        <div class="boot-text" style="animation-delay: 0.9s;">ESTABLISHING CONNECTION...</div>
-        <div class="boot-text" style="animation-delay: 1.2s;">READY.</div>
+        <div class="boot-text" style="animation-delay: 0s;">NEURAL LINK INITIATED...</div>
+        <div class="boot-text" style="animation-delay: 0.3s;">LOADING ASSETS...</div>
+        <div class="boot-text" style="animation-delay: 0.6s;">DECRYPTING PROJECTS...</div>
+        <div class="boot-text" style="animation-delay: 0.9s;">SYSTEM READY.</div>
     </div>
 
+    <!-- Music Toggle -->
     <div class="music-toggle" onclick="toggleMusic()">
         🎵 <span id="music-status">OFF</span>
     </div>
 
     <div class="container">
+        <!-- Header -->
         <header>
-            <div class="terminal-prompt">Hello</div>
+            <div class="terminal-prompt">Welcome !</div>
             <h1>KINGSHUK CHATTERJEE</h1>
             <div class="tagline">Elegance in code, clarity in design, beauty in form.</div>
         </header>
 
+        <!-- Navigation -->
         <nav>
             <a href="#about">ABOUT.SYS</a>
             <a href="#projects">PROJECTS.DIR</a>
@@ -35,6 +38,7 @@
             <a href="#contact">CONTACT.EXE</a>
         </nav>
 
+        <!-- About Section -->
         <section id="about" data-section="ABOUT.SYS">
             <h2>:: System Overview ::</h2>
             <div class="about-grid">
@@ -85,6 +89,7 @@
             </div>
         </section>
 
+        <!-- Projects Section -->
         <section id="projects" data-section="PROJECTS.DIR">
             <h2>:: Featured Projects ::</h2>
             <div class="projects-grid">
@@ -152,6 +157,7 @@
             </div>
         </section>
 
+        <!-- Skills Section -->
         <section id="skills" data-section="SKILLS.DAT">
             <h2>:: Technical Arsenal ::</h2>
             <div class="skills-grid">
@@ -190,6 +196,7 @@
             </div>
         </section>
 
+        <!-- Experience Section -->
         <section id="experience" data-section="EXPERIENCE.LOG">
             <h2>:: Career Timeline ::</h2>
             <div class="timeline">
@@ -225,6 +232,7 @@
             </div>
         </section>
 
+        <!-- Contact Section -->
         <section id="contact" data-section="CONTACT.EXE">
             <h2>:: Initialize Connection ::</h2>
             <form class="contact-form" action="https://formspree.io/f/myzlyrap" method="POST" id="contact-form">
@@ -250,13 +258,14 @@
             </div>
         </section>
 
+        <!-- Footer -->
         <footer>
             <div class="ascii-art">╔═══════════════════════════════════════╗
 ║  CRAFTED WITH CODE & CHARACTER        ║
 ╚═══════════════════════════════════════╝</div>
             <p>© 2025 Kingshuk Chatterjee – All Rights Reserved</p>
-            <p style="color: var(--teal); font-size: 12px; margin-top: 10px;">
-                System Status: ONLINE | Version: 1.0.0 | Last Updated: 2025.11.12
+            <p style="color: var(--neon-cyan); font-size: 12px; margin-top: 10px;">
+                System Status: ONLINE | Version: 2.0.0 | Last Updated: 2025.11.22
             </p>
         </footer>
     </div>
