@@ -1,3 +1,5 @@
+/* mainpage.css */
+
 /* Reset and Base Styles */
 * {
     margin: 0;
@@ -17,13 +19,15 @@
 
 body {
     font-family: 'IBM Plex Mono', monospace;
-    background: linear-gradient(135deg, #1a1410 0%, #2d2419 100%);
+    /* Dark solid background behind the GIF */
+    background-color: #050505; 
     color: var(--cream);
     overflow-x: hidden;
     position: relative;
+    min-height: 100vh;
 }
 
-/* Scanline Effect */
+/* Scanline Effect (Top Layer) */
 body::before {
     content: '';
     position: fixed;
@@ -43,17 +47,40 @@ body::before {
     animation: scanlines 8s linear infinite;
 }
 
+/* GIF Background Layer (Bottom Layer) */
+body::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* Ensure download.gif is in the same folder */
+    background-image: url('download.gif'); 
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0.4; /* 40% Opacity */
+    z-index: -1;
+}
+
 @keyframes scanlines {
     0% { transform: translateY(0); }
     100% { transform: translateY(4px); }
 }
 
+/* Main Content Container */
 .container {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 20px;
+    max-width: 1200px; /* Reduced slightly to show GIF on sides */
+    margin: 40px auto;
+    padding: 40px;
     position: relative;
     z-index: 1;
+    
+    /* MOVED: The original background theme is now here */
+    background: linear-gradient(135deg, #1a1410 0%, #2d2419 100%);
+    border: 1px solid var(--bg-secondary);
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.8); /* Shadow to separate from GIF */
 }
 
 /* Loading Screen */
@@ -361,6 +388,7 @@ h2 {
     color: var(--amber);
     font-size: 18px;
     margin-bottom: 10px;
+    font-family: 'VT323', monospace;
 }
 
 .skill-item p {
@@ -572,6 +600,12 @@ footer p {
     
     .timeline-item::before {
         left: -33px;
+    }
+    
+    .container {
+        padding: 20px;
+        margin: 20px 10px;
+        width: auto;
     }
 }
 
