@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="mainpage.css">
 </head>
 <body>
-    <!-- Loading Screen -->
     <div id="loading-screen">
         <div class="boot-text" style="animation-delay: 0s;">NEURAL LINK INITIATED...</div>
         <div class="boot-text" style="animation-delay: 0.3s;">LOADING ASSETS...</div>
@@ -16,7 +15,6 @@
         <div class="boot-text" style="animation-delay: 0.9s;">SYSTEM READY.</div>
     </div>
 
-    <!-- Music Toggle & Audio Source -->
     <div class="music-toggle" onclick="toggleMusic()">
         <div class="music-bars">
             <div class="bar"></div>
@@ -30,18 +28,15 @@
         <source src="cyberpunk_music.mp3" type="audio/mp3">
     </audio>
 
-    <!-- Visualizer Canvas -->
     <canvas id="audio-visualizer"></canvas>
 
     <div class="container">
-        <!-- Header -->
         <header>
             <div class="terminal-prompt">welcome</div>
             <h1>KINGSHUK CHATTERJEE</h1>
             <div class="tagline">Elegance in code, clarity in design, beauty in form.</div>
         </header>
 
-        <!-- Navigation -->
         <nav>
             <a href="#about">ABOUT.SYS</a>
             <a href="#projects">PROJECTS.DIR</a>
@@ -50,13 +45,10 @@
             <a href="#contact">CONTACT.EXE</a>
         </nav>
 
-        <!-- About Section -->
         <section id="about" data-section="ABOUT.SYS">
-            <!-- CHANGED HEADER HERE -->
             <h2>:: Neural Profile ::</h2>
             <div class="about-grid">
                 <div class="about-text">
-                    <!-- NEW BIO TEXT STARTS HERE -->
                     <p>
                         I am Kingshuk Chatterjee, a multidisciplinary designer and developer based in Bhubaneswar, India, working at the intersection of technology and visual craft. As an Automotive Designer and Poster Artist at Slipstream Studios, I create structured and high-fidelity visual compositions rooted in both engineering clarity and artistic discipline.
                     </p>
@@ -66,8 +58,7 @@
                     <p>
                         Beyond my technical practice, I engage in mentoring, speaking at university events, and contributing to open-source initiatives, guided by a belief in continuous learning and purposeful design.
                     </p>
-                    <!-- NEW BIO TEXT ENDS HERE -->
-                </div>
+                    </div>
                 <div class="stats-box">
                     <h3>STATS.TXT</h3>
                     <div class="stat-item">
@@ -94,7 +85,6 @@
             </div>
         </section>
 
-        <!-- Projects Section -->
         <section id="projects" data-section="PROJECTS.DIR">
             <h2>:: Featured Projects ::</h2>
             <div class="projects-grid">
@@ -162,7 +152,6 @@
             </div>
         </section>
 
-        <!-- Holographic Skill Grid -->
         <section id="skills" data-section="SKILLS.DAT">
             <h2>:: Technical Arsenal ::</h2>
             <div class="skills-grid">
@@ -209,7 +198,6 @@
             </div>
         </section>
 
-        <!-- Experience Section -->
         <section id="experience" data-section="EXPERIENCE.LOG">
             <h2>:: Career Timeline ::</h2>
             <div class="timeline">
@@ -245,7 +233,6 @@
             </div>
         </section>
 
-        <!-- Contact Section -->
         <section id="contact" data-section="CONTACT.EXE">
             <h2>:: Initialize Connection ::</h2>
             <form class="contact-form" action="https://formspree.io/f/myzlyrap" method="POST" id="contact-form">
@@ -271,7 +258,6 @@
             </div>
         </section>
 
-        <!-- Footer -->
         <footer>
             <div class="ascii-art">╔═══════════════════════════════════════╗
 ║  CRAFTED WITH CODE & CHARACTER        ║
@@ -284,5 +270,15 @@
     </div>
 
     <script src="mainpage.js"></script>
+
+    <script>
+      window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+    </script>
+    <script defer src="/_vercel/insights/script.js"></script>
+
+    <script>
+      window.si = window.si || function () { (window.siq = window.siq || []).push(arguments); };
+    </script>
+    <script defer src="/_vercel/speed-insights/script.js"></script>
 </body>
 </html>
