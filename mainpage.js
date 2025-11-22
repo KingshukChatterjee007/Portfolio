@@ -10,13 +10,13 @@ window.addEventListener('load', function() {
 });
 
 // ==========================================
-//  1. AUDIO CONTEXT & VISUALIZER
+//  1. AUDIO VISUALIZER LOGIC
 // ==========================================
 let musicPlaying = false;
 let audioContext;
 let analyser;
 let source;
-let canvas, ctx;
+let visualizerCanvas, vCtx;
 
 function setupAudioContext() {
     if (audioContext) return;
@@ -26,38 +26,32 @@ function setupAudioContext() {
     
     const audioTrack = document.getElementById('bg-music');
     
-    // Connect audio element to context
     source = audioContext.createMediaElementSource(audioTrack);
     analyser = audioContext.createAnalyser();
     
     source.connect(analyser);
     analyser.connect(audioContext.destination);
     
-    // Configure analyser
     analyser.fftSize = 256;
     
-    // Setup Canvas
-    canvas = document.getElementById('audio-visualizer');
-    ctx = canvas.getContext('2d');
+    visualizerCanvas = document.getElementById('audio-visualizer');
+    vCtx = visualizerCanvas.getContext('2d');
     
-    // Handle resize
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
+    window.addEventListener('resize', resizeVisualizer);
+    resizeVisualizer();
     
-    // Start drawing loop
-    renderFrame();
+    renderVisualizerFrame();
 }
 
-function resizeCanvas() {
-    if(canvas) {
-        canvas.width = window.innerWidth;
-        canvas.height = 200; // Match CSS height
+function resizeVisualizer() {
+    if(visualizerCanvas) {
+        visualizerCanvas.width = window.innerWidth;
+        visualizerCanvas.height = 200;
     }
 }
 
-function renderFrame() {
-    requestAnimationFrame(renderFrame);
-    
+function renderVisualizerFrame() {
+    requestAnimationFrame(renderVisualizerFrame);
     if (!analyser) return;
     
     const bufferLength = analyser.frequencyBinCount;
@@ -65,22 +59,21 @@ function renderFrame() {
     
     analyser.getByteFrequencyData(dataArray);
     
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    vCtx.clearRect(0, 0, visualizerCanvas.width, visualizerCanvas.height);
     
-    const barWidth = (canvas.width / bufferLength) * 2.5;
+    const barWidth = (visualizerCanvas.width / bufferLength) * 2.5;
     let barHeight;
     let x = 0;
     
     for (let i = 0; i < bufferLength; i++) {
-        barHeight = dataArray[i] / 1.5; // Scale height
+        barHeight = dataArray[i] / 1.5;
         
-        // Cyberpunk Gradient Colors
-        const gradient = ctx.createLinearGradient(0, canvas.height - barHeight, 0, canvas.height);
-        gradient.addColorStop(0, '#00f3ff'); // Cyan
-        gradient.addColorStop(1, '#bc13fe'); // Purple
+        const gradient = vCtx.createLinearGradient(0, visualizerCanvas.height - barHeight, 0, visualizerCanvas.height);
+        gradient.addColorStop(0, '#00f3ff');
+        gradient.addColorStop(1, '#bc13fe');
         
-        ctx.fillStyle = gradient;
-        ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
+        vCtx.fillStyle = gradient;
+        vCtx.fillRect(x, visualizerCanvas.height - barHeight, barWidth, barHeight);
         
         x += barWidth + 1;
     }
@@ -91,10 +84,8 @@ function toggleMusic() {
     const musicLabel = document.getElementById('music-label');
     const musicBtn = document.querySelector('.music-toggle');
     
-    // Initialize Context on first click (browser requirement)
     setupAudioContext();
     
-    // Resume context if suspended (Chrome policy)
     if (audioContext.state === 'suspended') {
         audioContext.resume();
     }
@@ -104,7 +95,6 @@ function toggleMusic() {
     if (musicPlaying) {
         musicLabel.textContent = 'AUDIO ON';
         musicBtn.classList.add('active');
-        
         if(audioTrack) {
             audioTrack.volume = 0.3;
             audioTrack.play().catch(e => console.log("Play error:", e));
@@ -117,13 +107,12 @@ function toggleMusic() {
 }
 
 // ==========================================
-//  2. SCROLL REVEAL ANIMATION
+//  2. SCROLL REVEAL
 // ==========================================
 const revealElements = document.querySelectorAll('section');
 
 function checkScrollReveal() {
     const triggerBottom = window.innerHeight * 0.85;
-    
     revealElements.forEach(box => {
         const boxTop = box.getBoundingClientRect().top;
         if(boxTop < triggerBottom) {
@@ -131,24 +120,27 @@ function checkScrollReveal() {
         }
     });
 }
-
 window.addEventListener('scroll', checkScrollReveal);
 
-
 // ==========================================
-//  3. "HACKER" TEXT DECODE EFFECT
+//  3. HACKER TEXT EFFECT (Only for Headers now)
 // ==========================================
 const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()_+-=[]{}|;':,./<>?";
 
 function hackerEffect(event) {
     let iterations = 0;
     const target = event.target;
-    const originalText = target.dataset.value || target.innerText;
     
-    if (!target.dataset.value) target.dataset.value = originalText;
+    // Only apply to headers, not skill items anymore
+    let textElement = target;
+    if (target.tagName !== 'H1' && target.tagName !== 'H2') return; 
+
+    const originalText = textElement.dataset.value || textElement.innerText;
+    
+    if (!textElement.dataset.value) textElement.dataset.value = originalText;
     
     const interval = setInterval(() => {
-        target.innerText = originalText.split("")
+        textElement.innerText = originalText.split("")
             .map((letter, index) => {
                 if(index < iterations) return originalText[index];
                 return letters[Math.floor(Math.random() * letters.length)];
@@ -160,17 +152,15 @@ function hackerEffect(event) {
     }, 30);
 }
 
+// Attach to Main Title and Headers ONLY
 document.querySelector('h1').onmouseover = hackerEffect;
-document.querySelectorAll('h2').forEach(header => {
-    header.onmouseover = hackerEffect;
-});
+document.querySelectorAll('h2').forEach(header => header.onmouseover = hackerEffect);
 
+// REMOVED: The listener for .skill-item is gone.
 
 // ==========================================
-//  4. STANDARD FUNCTIONALITY
+//  4. STANDARD UTILS
 // ==========================================
-
-// Contact Form
 const form = document.getElementById('contact-form');
 const formStatus = document.getElementById('form-status');
 
@@ -179,7 +169,6 @@ if (form) {
         e.preventDefault();
         const submitBtn = form.querySelector('.btn-submit');
         const originalText = submitBtn.textContent;
-        
         submitBtn.disabled = true;
         submitBtn.textContent = 'TRANSMITTING...';
         if(formStatus) formStatus.style.display = 'none';
@@ -211,7 +200,6 @@ if (form) {
     });
 }
 
-// Smooth Scroll
 document.querySelectorAll('nav a').forEach(anchor => {
     anchor.addEventListener('click', function(e) {
         e.preventDefault();
@@ -222,7 +210,6 @@ document.querySelectorAll('nav a').forEach(anchor => {
     });
 });
 
-// Konami Code
 let konamiCode = [];
 const konamiSequence = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
 
@@ -236,7 +223,6 @@ document.addEventListener('keydown', function(e) {
     }
 });
 
-// Glitch Effect
 setInterval(() => {
     const elements = document.querySelectorAll('h2, h3');
     if(elements.length > 0) {
@@ -251,4 +237,4 @@ setInterval(() => {
     }
 }, 3000);
 
-console.log('%c✓ AUDIO VISUALIZER ONLINE.', 'color: #00f3ff; font-weight: bold; font-family: monospace;');
+console.log('%c✓ SYSTEM ONLINE.', 'color: #00f3ff; font-weight: bold; font-family: monospace;');

@@ -61,10 +61,10 @@ html {
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 200px; /* Height of the visualizer bars */
-    z-index: 0; /* Behind content (1) but above background (-1) */
-    pointer-events: none; /* Let clicks pass through */
-    opacity: 0.6; /* Subtle opacity */
+    height: 200px; 
+    z-index: 0; 
+    pointer-events: none; 
+    opacity: 0.6;
 }
 
 body {
@@ -77,8 +77,7 @@ body {
     cursor: crosshair;
 }
 
-/* Interactive Elements */
-a, button, .music-toggle, .project-card {
+a, button, .music-toggle, .project-card, .skill-item {
     cursor: pointer;
 }
 
@@ -274,7 +273,7 @@ nav a:hover {
     border-color: #fff;
 }
 
-/* Sections - SCROLL REVEAL STYLES */
+/* Sections */
 section {
     background: rgba(255, 255, 255, 0.02);
     border: 1px solid var(--text-muted);
@@ -284,13 +283,11 @@ section {
     position: relative;
     will-change: transform, opacity;
     
-    /* Initial Hidden State */
     opacity: 0;
     transform: translateY(30px);
     transition: opacity 0.6s ease-out, transform 0.6s ease-out;
 }
 
-/* Visible State (Applied by JS) */
 section.visible-section {
     opacity: 1;
     transform: translateY(0);
@@ -397,7 +394,6 @@ h2 {
     transition: transform 0.3s ease;
 }
 
-/* Smooth Hover Effect */
 .project-card:hover {
     transform: translateY(-10px);
     box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5), 0 0 15px var(--neon-purple);
@@ -438,38 +434,103 @@ h2 {
     border-radius: 2px;
 }
 
-/* Skills Grid */
+/* =========================================
+   HOLOGRAPHIC SKILLS GRID (Updated Hover)
+   ========================================= 
+*/
 .skills-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 25px;
     margin-top: 30px;
 }
 
 .skill-item {
-    background: rgba(0, 0, 0, 0.3);
+    background: rgba(0, 0, 0, 0.4);
     border: 1px solid var(--text-muted);
-    padding: 20px;
-    text-align: center;
+    padding: 25px;
     position: relative;
-    transition: all 0.3s;
+    transition: all 0.4s ease;
+    overflow: hidden;
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%);
 }
 
-.skill-item:hover {
-    border-color: var(--neon-cyan);
-    box-shadow: 0 0 20px rgba(0, 243, 255, 0.2);
-    transform: scale(1.02);
+/* SCANNING BEAM ANIMATION */
+.skill-item::before {
+    content: '';
+    position: absolute;
+    top: -150%;
+    left: 0;
+    width: 100%;
+    height: 50%;
+    background: linear-gradient(to bottom, transparent, rgba(0, 243, 255, 0.4), transparent);
+    transform: skewY(-10deg);
+    transition: 0.5s;
+    pointer-events: none;
+}
+
+.skill-item:hover::before {
+    animation: scan-beam 1.5s linear infinite;
+}
+
+@keyframes scan-beam {
+    0% { top: -150%; }
+    100% { top: 150%; }
+}
+
+/* Corner Accent */
+.skill-item::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 20px;
+    height: 20px;
+    background: linear-gradient(135deg, transparent 50%, var(--neon-purple) 50%);
+    opacity: 0.5;
 }
 
 .skill-item h3 {
-    color: var(--neon-purple);
+    color: var(--neon-cyan);
     font-size: 18px;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
+    font-family: 'VT323', monospace;
+    letter-spacing: 1px;
 }
 
 .skill-item p {
-    color: var(--text-main);
-    font-size: 14px;
+    color: var(--text-muted);
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+/* Hover Effects - Stable Text */
+.skill-item:hover {
+    transform: translateY(-5px) scale(1.02);
+    background: rgba(0, 243, 255, 0.05);
+    border-color: var(--neon-cyan);
+    box-shadow: 0 0 20px rgba(0, 243, 255, 0.15),
+                inset 0 0 20px rgba(0, 243, 255, 0.05);
+}
+
+/* Color Variants */
+.skill-item[data-group="design"]:hover { border-color: var(--neon-purple); box-shadow: 0 0 20px rgba(188, 19, 254, 0.2); }
+.skill-item[data-group="ai"]:hover { border-color: var(--neon-pink); box-shadow: 0 0 20px rgba(255, 0, 85, 0.2); }
+.skill-item[data-group="data"]:hover { border-color: var(--neon-yellow); box-shadow: 0 0 20px rgba(255, 230, 0, 0.2); }
+
+/* Loading Bar Animation */
+.skill-bar {
+    height: 2px;
+    width: 0%;
+    background: var(--neon-cyan);
+    margin-top: 15px;
+    transition: width 0.5s ease;
+    opacity: 0.5;
+}
+
+.skill-item:hover .skill-bar {
+    width: 100%;
+    opacity: 1;
 }
 
 /* Experience Timeline */

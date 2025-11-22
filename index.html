@@ -26,19 +26,17 @@
         <span id="music-label">AUDIO OFF</span>
     </div>
     
-    <!-- IMPORTANT: Ensure 'cyberpunk_music.mp3' exists -->
-    <!-- 'crossorigin' is needed for Web Audio API if hosted externally, good practice to include -->
     <audio id="bg-music" loop crossorigin="anonymous">
         <source src="cyberpunk_music.mp3" type="audio/mp3">
     </audio>
 
-    <!-- NEW: Visualizer Canvas -->
+    <!-- Visualizer Canvas (Kept for bottom of screen effect) -->
     <canvas id="audio-visualizer"></canvas>
 
     <div class="container">
         <!-- Header -->
         <header>
-            <div class="terminal-prompt">welcome</div>
+            <div class="terminal-prompt">root@kingshuk:~$ ./welcome.sh</div>
             <h1>KINGSHUK CHATTERJEE</h1>
             <div class="tagline">Elegance in code, clarity in design, beauty in form.</div>
         </header>
@@ -171,41 +169,49 @@
             </div>
         </section>
 
-        <!-- Skills Section -->
+        <!-- UPDATED: Holographic Skill Grid -->
         <section id="skills" data-section="SKILLS.DAT">
             <h2>:: Technical Arsenal ::</h2>
             <div class="skills-grid">
-                <div class="skill-item">
+                <div class="skill-item" data-group="design">
                     <h3>UX/UI Design</h3>
                     <p>Product Design Systems, Figma, Adobe Suite</p>
+                    <div class="skill-bar"></div>
                 </div>
-                <div class="skill-item">
+                <div class="skill-item" data-group="data">
                     <h3>Data Analytics</h3>
                     <p>Power BI, Tableau, Data Storytelling</p>
+                    <div class="skill-bar"></div>
                 </div>
-                <div class="skill-item">
+                <div class="skill-item" data-group="ai">
                     <h3>Machine Learning</h3>
                     <p>Python, TensorFlow, Financial Forecasting</p>
+                    <div class="skill-bar"></div>
                 </div>
-                <div class="skill-item">
+                <div class="skill-item" data-group="code">
                     <h3>Web Development</h3>
                     <p>Flask, Django, HTML/CSS/JS</p>
+                    <div class="skill-bar"></div>
                 </div>
-                <div class="skill-item">
+                <div class="skill-item" data-group="cloud">
                     <h3>Cloud Tech</h3>
                     <p>Azure Fundamentals, Cloud Architecture</p>
+                    <div class="skill-bar"></div>
                 </div>
-                <div class="skill-item">
+                <div class="skill-item" data-group="design">
                     <h3>Video Editing</h3>
                     <p>DaVinci Resolve, Adobe Premiere</p>
+                    <div class="skill-bar"></div>
                 </div>
-                <div class="skill-item">
+                <div class="skill-item" data-group="design">
                     <h3>3D Design</h3>
                     <p>Blender, Automotive Visualization</p>
+                    <div class="skill-bar"></div>
                 </div>
-                <div class="skill-item">
+                <div class="skill-item" data-group="code">
                     <h3>Problem Solving</h3>
                     <p>566+ LeetCode Problems, Algorithms</p>
+                    <div class="skill-bar"></div>
                 </div>
             </div>
         </section>
@@ -279,7 +285,7 @@
 ╚═══════════════════════════════════════╝</div>
             <p>© 2025 Kingshuk Chatterjee – All Rights Reserved</p>
             <p style="color: var(--neon-cyan); font-size: 12px; margin-top: 10px;">
-                System Status: ONLINE | Version: 2.1.1 | Last Updated: 2025.11.23
+                System Status: ONLINE | Version: 2.3.0 | Last Updated: 2025.11.23
             </p>
         </footer>
     </div>
