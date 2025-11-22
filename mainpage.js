@@ -5,63 +5,116 @@ window.addEventListener('load', function() {
         if(loadingScreen) {
             loadingScreen.classList.add('hidden');
         }
+        // Trigger reveal for sections already in view on load
+        checkScrollReveal();
     }, 1800);
 });
 
-// Music Toggle Logic
+// ==========================================
+//  1. ROBUST MUSIC LOGIC
+// ==========================================
 let musicPlaying = false;
 
 function toggleMusic() {
-    // We define these INSIDE the function to ensure they exist when you click
     const audioTrack = document.getElementById('bg-music');
     const musicLabel = document.getElementById('music-label');
     const musicBtn = document.querySelector('.music-toggle');
     
-    // Toggle state
     musicPlaying = !musicPlaying;
     
     if (musicPlaying) {
-        // Case: Turn ON
         musicLabel.textContent = 'AUDIO ON';
         musicBtn.classList.add('active');
         
         if(audioTrack) {
-            audioTrack.volume = 0.3; // 30% volume
+            audioTrack.volume = 0.3;
             var playPromise = audioTrack.play();
             
             if (playPromise !== undefined) {
-                playPromise.then(_ => {
-                    // Playback started!
-                    console.log("Audio started playing");
-                })
+                playPromise.then(_ => { console.log("Audio started"); })
                 .catch(error => {
-                    console.log("Audio playback failed:", error);
-                    alert("⚠ Audio Error: Check if 'cyberpunk_music.mp3' is in the folder.");
+                    console.log("Audio error:", error);
+                    alert("⚠ Audio Error: Ensure 'cyberpunk_music.mp3' is uploaded.");
                 });
             }
         } else {
-            alert("Error: <audio> tag not found in HTML");
+            alert("Error: <audio> tag not found");
         }
-
     } else {
-        // Case: Turn OFF
         musicLabel.textContent = 'AUDIO OFF';
         musicBtn.classList.remove('active');
-        
-        if(audioTrack) {
-            audioTrack.pause();
-        }
+        if(audioTrack) audioTrack.pause();
     }
 }
 
-// Contact Form with Formspree
+// ==========================================
+//  2. SCROLL REVEAL ANIMATION
+// ==========================================
+const revealElements = document.querySelectorAll('section');
+
+function checkScrollReveal() {
+    const triggerBottom = window.innerHeight * 0.85; // Trigger when 85% down the viewport
+    
+    revealElements.forEach(box => {
+        const boxTop = box.getBoundingClientRect().top;
+        if(boxTop < triggerBottom) {
+            box.classList.add('visible-section');
+        }
+    });
+}
+
+window.addEventListener('scroll', checkScrollReveal);
+
+
+// ==========================================
+//  3. "HACKER" TEXT DECODE EFFECT
+// ==========================================
+const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()_+-=[]{}|;':,./<>?";
+
+function hackerEffect(event) {
+    let iterations = 0;
+    const target = event.target;
+    const originalText = target.dataset.value || target.innerText;
+    
+    // Store original text in data-attribute if not present, so we don't lose it
+    if (!target.dataset.value) target.dataset.value = originalText;
+    
+    const interval = setInterval(() => {
+        target.innerText = originalText.split("")
+            .map((letter, index) => {
+                if(index < iterations) {
+                    return originalText[index];
+                }
+                return letters[Math.floor(Math.random() * letters.length)];
+            })
+            .join("");
+        
+        if(iterations >= originalText.length) {
+            clearInterval(interval);
+        }
+        
+        iterations += 1 / 3;
+    }, 30);
+}
+
+// Attach effect to Main Title and Section Headers
+document.querySelector('h1').onmouseover = hackerEffect;
+document.querySelectorAll('h2').forEach(header => {
+    header.onmouseover = hackerEffect;
+});
+
+
+// ==========================================
+//  4. STANDARD FUNCTIONALITY (Form, Scroll)
+// ==========================================
+
+// Contact Form
 const form = document.getElementById('contact-form');
 const formStatus = document.getElementById('form-status');
 
 if (form) {
     form.addEventListener('submit', async function(e) {
         e.preventDefault();
-        
         const submitBtn = form.querySelector('.btn-submit');
         const originalText = submitBtn.textContent;
         
@@ -73,24 +126,19 @@ if (form) {
             const response = await fetch(form.action, {
                 method: 'POST',
                 body: new FormData(form),
-                headers: {
-                    'Accept': 'application/json'
-                }
+                headers: { 'Accept': 'application/json' }
             });
-            
             if (response.ok) {
                 if(formStatus) {
-                    formStatus.textContent = '✓ MESSAGE TRANSMITTED SUCCESSFULLY!';
+                    formStatus.textContent = '✓ MESSAGE TRANSMITTED!';
                     formStatus.className = 'form-status success';
                     formStatus.style.display = 'block';
                 }
                 form.reset();
-            } else {
-                throw new Error('Form submission failed');
-            }
+            } else throw new Error('Failed');
         } catch (error) {
             if(formStatus) {
-                formStatus.textContent = '⚠ TRANSMISSION ERROR: Please try again.';
+                formStatus.textContent = '⚠ TRANSMISSION ERROR';
                 formStatus.className = 'form-status error';
                 formStatus.style.display = 'block';
             }
@@ -112,67 +160,21 @@ document.querySelectorAll('nav a').forEach(anchor => {
     });
 });
 
-// Easter Egg Console Commands
-document.addEventListener('keydown', function(e) {
-    if (e.ctrlKey && e.key === '`') {
-        const command = prompt('SYSTEM TERMINAL\n\nType "help" for commands:');
-        if (command) {
-            processCommand(command.toLowerCase());
-        }
-    }
-});
-
-function processCommand(cmd) {
-    switch(cmd) {
-        case 'help':
-            console.log('AVAILABLE COMMANDS: help, about, stats, skills, ascii, clear');
-            break;
-        case 'about':
-            console.log('Kingshuk Chatterjee | Cyberpunk Architect');
-            break;
-        case 'clear':
-            console.clear();
-            break;
-        default:
-            console.log('⚠ Command not recognized.');
-    }
-}
-
-// Konami Code Easter Egg
+// Konami Code
 let konamiCode = [];
 const konamiSequence = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
 
 document.addEventListener('keydown', function(e) {
     konamiCode.push(e.key);
     konamiCode = konamiCode.slice(-10);
-    
     if (konamiCode.join(',') === konamiSequence.join(',')) {
-        alert('🎮 KONAMI CODE ACTIVATED! COLOR OVERRIDE ENGAGED!');
+        alert('🎮 KONAMI CODE ACTIVATED! NEON OVERDRIVE!');
         document.documentElement.style.setProperty('--neon-cyan', '#ff00ff');
         document.documentElement.style.setProperty('--neon-pink', '#00ff00');
     }
 });
 
-// OPTIMIZED PARALLAX EFFECT
-const parallaxElements = document.querySelectorAll('section');
-let ticking = false;
-
-window.addEventListener('scroll', function() {
-    if (!ticking) {
-        window.requestAnimationFrame(function() {
-            const scrolled = window.pageYOffset;
-            parallaxElements.forEach((element, index) => {
-                const speed = 0.05 + (index * 0.02);
-                const yPos = -(scrolled * speed);
-                element.style.transform = `translateY(${yPos}px)`;
-            });
-            ticking = false;
-        });
-        ticking = true;
-    }
-});
-
-// OPTIMIZED GLITCH EFFECT
+// Glitch Effect (Interval)
 setInterval(() => {
     const elements = document.querySelectorAll('h2, h3');
     if(elements.length > 0) {
@@ -187,4 +189,4 @@ setInterval(() => {
     }
 }, 3000);
 
-console.log('%c✓ NEURAL LINK ESTABLISHED.', 'color: #00f3ff; font-weight: bold; font-family: monospace;');
+console.log('%c✓ SYSTEM UPGRADE COMPLETE.', 'color: #00f3ff; font-weight: bold; font-family: monospace;');

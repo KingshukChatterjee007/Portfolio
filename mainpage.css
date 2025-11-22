@@ -8,7 +8,6 @@
 :root {
     /* CYBERPUNK PALETTE */
     --bg-dark: #050505;
-    /* Increased opacity slightly since we removed the blur, to keep text readable */
     --bg-panel: rgba(10, 10, 25, 0.95); 
     --text-main: #e0e0ff; 
     --text-muted: #b0b0d0;
@@ -30,9 +29,16 @@ body {
     overflow-x: hidden;
     position: relative;
     min-height: 100vh;
+    /* Custom Cyberpunk Cursor */
+    cursor: crosshair;
 }
 
-/* Scanline Effect (Top Layer) */
+/* Interactive Elements get a pointer */
+a, button, .music-toggle, .project-card {
+    cursor: pointer;
+}
+
+/* Scanline Effect */
 body::before {
     content: '';
     position: fixed;
@@ -50,10 +56,10 @@ body::before {
     pointer-events: none;
     z-index: 1000;
     animation: scanlines 8s linear infinite;
-    will-change: transform; /* Performance optimization */
+    will-change: transform; 
 }
 
-/* GIF Background Layer (Bottom Layer) */
+/* GIF Background Layer */
 body::after {
     content: '';
     position: fixed;
@@ -67,7 +73,7 @@ body::after {
     background-repeat: no-repeat;
     opacity: 0.4;
     z-index: -1;
-    will-change: transform; /* Performance optimization */
+    will-change: transform; 
 }
 
 @keyframes scanlines {
@@ -82,8 +88,6 @@ body::after {
     padding: 40px;
     position: relative;
     z-index: 1;
-    
-    /* PERFORMANCE FIX: Removed backdrop-filter: blur() */
     background: var(--bg-panel);
     border: 1px solid var(--neon-purple);
     box-shadow: 0 0 30px rgba(188, 19, 254, 0.2), 
@@ -171,6 +175,8 @@ h1 {
                  2px 2px 0px var(--neon-purple);
     margin-bottom: 10px;
     letter-spacing: 3px;
+    /* Indicates text interaction */
+    cursor: help; 
 }
 
 .tagline {
@@ -225,7 +231,7 @@ nav a:hover {
     border-color: #fff;
 }
 
-/* Sections */
+/* Sections - SCROLL REVEAL STYLES */
 section {
     background: rgba(255, 255, 255, 0.02);
     border: 1px solid var(--text-muted);
@@ -233,7 +239,18 @@ section {
     padding: 40px;
     margin-bottom: 40px;
     position: relative;
-    will-change: transform; /* Performance optimization */
+    will-change: transform, opacity;
+    
+    /* Initial Hidden State */
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+/* Visible State (Applied by JS) */
+section.visible-section {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 section::before {
@@ -259,6 +276,7 @@ h2 {
     border-bottom: 1px dashed var(--text-muted);
     padding-bottom: 10px;
     display: inline-block;
+    cursor: help;
 }
 
 /* About Section */
@@ -318,7 +336,7 @@ h2 {
     border: 1px solid rgba(255, 255, 255, 0.1);
     padding: 25px;
     position: relative;
-    transition: transform 0.2s ease, box-shadow 0.2s ease; /* Faster transition */
+    transition: transform 0.2s ease, box-shadow 0.2s ease; 
     cursor: pointer;
     overflow: hidden;
 }
@@ -336,15 +354,26 @@ h2 {
     transition: transform 0.3s ease;
 }
 
-.project-card:hover::before {
-    transform: scaleX(1);
-}
-
+/* Glitch Hover Effect for Cards */
 .project-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     border-color: var(--neon-purple);
     background: rgba(255, 255, 255, 0.05);
+    animation: glitch-skew 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both infinite;
+}
+
+.project-card:hover::before {
+    transform: scaleX(1);
+}
+
+@keyframes glitch-skew {
+    0% { transform: translate(0) }
+    20% { transform: translate(-1px, 1px) }
+    40% { transform: translate(-1px, -1px) }
+    60% { transform: translate(1px, 1px) }
+    80% { transform: translate(1px, -1px) }
+    100% { transform: translate(0) }
 }
 
 .project-card h3 {
@@ -396,6 +425,7 @@ h2 {
 .skill-item:hover {
     border-color: var(--neon-cyan);
     box-shadow: 0 0 20px rgba(0, 243, 255, 0.2);
+    transform: scale(1.02);
 }
 
 .skill-item h3 {
@@ -576,7 +606,7 @@ footer p {
     text-shadow: 0 0 5px var(--neon-cyan);
 }
 
-/* Music Toggle */
+/* Music Toggle & Animation */
 .music-toggle {
     position: fixed;
     bottom: 30px;
@@ -584,18 +614,59 @@ footer p {
     background: rgba(0, 0, 0, 0.8);
     border: 2px solid var(--neon-pink);
     color: var(--neon-pink);
-    padding: 15px;
+    padding: 10px 20px;
     cursor: pointer;
     z-index: 100;
-    box-shadow: 0 0 20px rgba(255, 0, 85, 0.4);
+    box-shadow: 0 0 10px rgba(255, 0, 85, 0.3);
     transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: bold;
+    font-size: 14px;
 }
 
 .music-toggle:hover {
-    transform: scale(1.1);
-    box-shadow: 0 0 30px rgba(255, 0, 85, 0.6);
-    background: var(--neon-pink);
-    color: #fff;
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(255, 0, 85, 0.6);
+    background: rgba(255, 0, 85, 0.1);
+}
+
+.music-toggle.active {
+    border-color: var(--neon-cyan);
+    color: var(--neon-cyan);
+    box-shadow: 0 0 20px rgba(0, 243, 255, 0.5);
+}
+
+/* Mini Equalizer Bars */
+.music-bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 3px;
+    height: 15px;
+}
+
+.bar {
+    width: 3px;
+    background-color: var(--neon-pink);
+    height: 3px;
+    transition: all 0.2s;
+}
+
+.music-toggle.active .bar {
+    background-color: var(--neon-cyan);
+    animation: equalizer 0.8s infinite ease-in-out;
+}
+
+.music-toggle.active .bar:nth-child(1) { animation-delay: 0s; }
+.music-toggle.active .bar:nth-child(2) { animation-delay: 0.2s; }
+.music-toggle.active .bar:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes equalizer {
+    0% { height: 3px; }
+    50% { height: 15px; }
+    100% { height: 3px; }
 }
 
 /* Responsive Design */
