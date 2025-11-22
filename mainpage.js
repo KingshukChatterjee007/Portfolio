@@ -1,34 +1,104 @@
 // Loading Screen
 window.addEventListener('load', function() {
     setTimeout(function() {
-        document.getElementById('loading-screen').classList.add('hidden');
+        const loadingScreen = document.getElementById('loading-screen');
+        if(loadingScreen) {
+            loadingScreen.classList.add('hidden');
+        }
     }, 1800);
 });
 
-// Music Toggle
+// Music Toggle Logic
 let musicPlaying = false;
+
 function toggleMusic() {
+    // We define these INSIDE the function to ensure they exist when you click
+    const audioTrack = document.getElementById('bg-music');
+    const musicLabel = document.getElementById('music-label');
+    const musicBtn = document.querySelector('.music-toggle');
+    
+    // Toggle state
     musicPlaying = !musicPlaying;
-    document.getElementById('music-status').textContent = musicPlaying ? 'ON' : 'OFF';
+    
     if (musicPlaying) {
-        console.log('🎵 Retro synth music would play here');
+        // Case: Turn ON
+        musicLabel.textContent = 'AUDIO ON';
+        musicBtn.classList.add('active');
+        
+        if(audioTrack) {
+            audioTrack.volume = 0.3; // 30% volume
+            var playPromise = audioTrack.play();
+            
+            if (playPromise !== undefined) {
+                playPromise.then(_ => {
+                    // Playback started!
+                    console.log("Audio started playing");
+                })
+                .catch(error => {
+                    console.log("Audio playback failed:", error);
+                    alert("⚠ Audio Error: Check if 'cyberpunk_music.mp3' is in the folder.");
+                });
+            }
+        } else {
+            alert("Error: <audio> tag not found in HTML");
+        }
+
+    } else {
+        // Case: Turn OFF
+        musicLabel.textContent = 'AUDIO OFF';
+        musicBtn.classList.remove('active');
+        
+        if(audioTrack) {
+            audioTrack.pause();
+        }
     }
 }
 
-// Contact Form
-function sendMessage() {
-    const name = document.getElementById('contact-name').value;
-    const email = document.getElementById('contact-email').value;
-    const message = document.getElementById('contact-message').value;
-    
-    if (name && email && message) {
-        alert('✓ MESSAGE TRANSMITTED SUCCESSFULLY\n\nThank you for reaching out! I will respond soon.');
-        document.getElementById('contact-name').value = '';
-        document.getElementById('contact-email').value = '';
-        document.getElementById('contact-message').value = '';
-    } else {
-        alert('⚠ ERROR: All fields required for transmission');
-    }
+// Contact Form with Formspree
+const form = document.getElementById('contact-form');
+const formStatus = document.getElementById('form-status');
+
+if (form) {
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const submitBtn = form.querySelector('.btn-submit');
+        const originalText = submitBtn.textContent;
+        
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'TRANSMITTING...';
+        if(formStatus) formStatus.style.display = 'none';
+        
+        try {
+            const response = await fetch(form.action, {
+                method: 'POST',
+                body: new FormData(form),
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
+            
+            if (response.ok) {
+                if(formStatus) {
+                    formStatus.textContent = '✓ MESSAGE TRANSMITTED SUCCESSFULLY!';
+                    formStatus.className = 'form-status success';
+                    formStatus.style.display = 'block';
+                }
+                form.reset();
+            } else {
+                throw new Error('Form submission failed');
+            }
+        } catch (error) {
+            if(formStatus) {
+                formStatus.textContent = '⚠ TRANSMISSION ERROR: Please try again.';
+                formStatus.className = 'form-status error';
+                formStatus.style.display = 'block';
+            }
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.textContent = originalText;
+        }
+    });
 }
 
 // Smooth Scroll
@@ -55,55 +125,18 @@ document.addEventListener('keydown', function(e) {
 function processCommand(cmd) {
     switch(cmd) {
         case 'help':
-            console.log(`
-╔══════════════════════════════════════╗
-║  AVAILABLE COMMANDS                  ║
-╠══════════════════════════════════════╣
-║  help     - Show this message        ║
-║  about    - Display bio              ║
-║  stats    - Show statistics          ║
-║  skills   - List all skills          ║
-║  ascii    - Display ASCII art        ║
-║  clear    - Clear console            ║
-╚══════════════════════════════════════╝
-            `);
+            console.log('AVAILABLE COMMANDS: help, about, stats, skills, ascii, clear');
             break;
         case 'about':
-            console.log('Kingshuk Chatterjee | Designer • Developer • Creator\nMumbai, India | IBM Certified | Open Source Enthusiast');
-            break;
-        case 'stats':
-            console.log('LeetCode: 566+ problems solved\nProjects: 20+\nCertifications: IBM Python AI\nDesign Rank: Top 3');
-            break;
-        case 'skills':
-            console.log('UX/UI • Machine Learning • Data Analytics • Web Dev • 3D Design • Video Editing • Cloud Tech');
-            break;
-        case 'ascii':
-            console.log(`
-    ██╗  ██╗ ██████╗
-    ██║ ██╔╝██╔════╝
-    █████╔╝ ██║     
-    ██╔═██╗ ██║     
-    ██║  ██╗╚██████╗
-    ╚═╝  ╚═╝ ╚═════╝
-    KINGSHUK CHATTERJEE
-            `);
+            console.log('Kingshuk Chatterjee | Cyberpunk Architect');
             break;
         case 'clear':
             console.clear();
-            console.log('Console cleared. Type Ctrl+` for terminal access.');
             break;
         default:
-            console.log('⚠ Command not recognized. Type "help" for available commands.');
+            console.log('⚠ Command not recognized.');
     }
 }
-
-// Project Card Interactions
-document.querySelectorAll('.project-card').forEach(card => {
-    card.addEventListener('click', function() {
-        const title = this.querySelector('h3').textContent;
-        console.log(`📂 Opening project: ${title}`);
-    });
-});
 
 // Konami Code Easter Egg
 let konamiCode = [];
@@ -114,113 +147,44 @@ document.addEventListener('keydown', function(e) {
     konamiCode = konamiCode.slice(-10);
     
     if (konamiCode.join(',') === konamiSequence.join(',')) {
-        activateEasterEgg();
+        alert('🎮 KONAMI CODE ACTIVATED! COLOR OVERRIDE ENGAGED!');
+        document.documentElement.style.setProperty('--neon-cyan', '#ff00ff');
+        document.documentElement.style.setProperty('--neon-pink', '#00ff00');
     }
 });
 
-function activateEasterEgg() {
-    const root = document.documentElement;
-    
-    // Rainbow mode
-    let hue = 0;
-    const interval = setInterval(() => {
-        hue = (hue + 1) % 360;
-        root.style.setProperty('--amber', `hsl(${hue}, 70%, 60%)`);
-        root.style.setProperty('--teal', `hsl(${(hue + 120) % 360}, 70%, 60%)`);
-        root.style.setProperty('--neon-red', `hsl(${(hue + 240) % 360}, 70%, 60%)`);
-    }, 50);
+// OPTIMIZED PARALLAX EFFECT
+const parallaxElements = document.querySelectorAll('section');
+let ticking = false;
 
-    alert('🎮 KONAMI CODE ACTIVATED!\n\nRAINBOW MODE ENABLED!\n\nRefresh page to restore normal colors.');
-}
-
-// Initialize console message
-console.log('%c╔═══════════════════════════════════════════════════╗', 'color: #ffb347; font-family: monospace;');
-console.log('%c║  WELCOME TO KINGSHUK CHATTERJEE\'S PORTFOLIO      ║', 'color: #5ab9b4; font-family: monospace;');
-console.log('%c║  Press Ctrl + ` to access the terminal           ║', 'color: #f4e8d8; font-family: monospace;');
-console.log('%c║  Try the Konami Code for a surprise! ↑↑↓↓←→←→BA  ║', 'color: #ff6b6b; font-family: monospace;');
-console.log('%c╚═══════════════════════════════════════════════════╝', 'color: #ffb347; font-family: monospace;');
-
-// Parallax Effect on Scroll
 window.addEventListener('scroll', function() {
-    const scrolled = window.pageYOffset;
-    const parallaxElements = document.querySelectorAll('section');
-    
-    parallaxElements.forEach((element, index) => {
-        const speed = 0.5 + (index * 0.1);
-        const yPos = -(scrolled * speed / 10);
-        element.style.transform = `translateY(${yPos}px)`;
-    });
+    if (!ticking) {
+        window.requestAnimationFrame(function() {
+            const scrolled = window.pageYOffset;
+            parallaxElements.forEach((element, index) => {
+                const speed = 0.05 + (index * 0.02);
+                const yPos = -(scrolled * speed);
+                element.style.transform = `translateY(${yPos}px)`;
+            });
+            ticking = false;
+        });
+        ticking = true;
+    }
 });
 
-// Random Glitch Effect
+// OPTIMIZED GLITCH EFFECT
 setInterval(() => {
     const elements = document.querySelectorAll('h2, h3');
-    const randomElement = elements[Math.floor(Math.random() * elements.length)];
-    
-    if (Math.random() > 0.95) {
-        randomElement.style.textShadow = '3px 3px 0 rgba(255,107,107,0.8), -3px -3px 0 rgba(90,185,180,0.8)';
-        setTimeout(() => {
-            randomElement.style.textShadow = '';
-        }, 100);
+    if(elements.length > 0) {
+        const randomElement = elements[Math.floor(Math.random() * elements.length)];
+        if (Math.random() > 0.98) {
+            const originalShadow = randomElement.style.textShadow;
+            randomElement.style.textShadow = '3px 3px 0 rgba(255,0,85,0.8), -3px -3px 0 rgba(0,243,255,0.8)';
+            setTimeout(() => {
+                randomElement.style.textShadow = originalShadow;
+            }, 100);
+        }
     }
-}, 2000);
+}, 3000);
 
-// Cursor Trail Effect
-const cursor = document.createElement('div');
-cursor.style.cssText = `
-    position: fixed;
-    width: 10px;
-    height: 10px;
-    border: 2px solid var(--amber);
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 9999;
-    opacity: 0.6;
-    transition: all 0.15s ease;
-`;
-document.body.appendChild(cursor);
-
-document.addEventListener('mousemove', (e) => {
-    cursor.style.left = e.clientX - 5 + 'px';
-    cursor.style.top = e.clientY - 5 + 'px';
-});
-
-// Interactive Stats Counter
-const stats = document.querySelectorAll('.stat-item span:last-child');
-const observerOptions = {
-    threshold: 0.5
-};
-
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            const target = entry.target;
-            const text = target.textContent;
-            if (text.includes('+')) {
-                const number = parseInt(text);
-                animateCounter(target, 0, number, 1500);
-            }
-        }
-    });
-}, observerOptions);
-
-function animateCounter(element, start, end, duration) {
-    const range = end - start;
-    const increment = range / (duration / 16);
-    let current = start;
-    
-    const timer = setInterval(() => {
-        current += increment;
-        if (current >= end) {
-            element.textContent = end + '+';
-            clearInterval(timer);
-        } else {
-            element.textContent = Math.floor(current) + '+';
-        }
-    }, 16);
-}
-
-stats.forEach(stat => observer.observe(stat));
-
-// Log initialization complete
-console.log('%c✓ All systems initialized. Portfolio ready.', 'color: #5ab9b4; font-weight: bold; font-family: monospace;');
+console.log('%c✓ NEURAL LINK ESTABLISHED.', 'color: #00f3ff; font-weight: bold; font-family: monospace;');

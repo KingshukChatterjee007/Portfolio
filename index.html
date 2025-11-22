@@ -16,15 +16,26 @@
         <div class="boot-text" style="animation-delay: 0.9s;">SYSTEM READY.</div>
     </div>
 
-    <!-- Music Toggle -->
+    <!-- Music Toggle & Audio Source (THIS WAS MISSING) -->
     <div class="music-toggle" onclick="toggleMusic()">
-        🎵 <span id="music-status">OFF</span>
+        <!-- Visualizer Bars -->
+        <div class="music-bars">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+        <span id="music-label">AUDIO OFF</span>
     </div>
+    
+    <!-- IMPORTANT: This points to your file 'cyberpunk_music.mp3' -->
+    <audio id="bg-music" loop>
+        <source src="cyberpunk_music.mp3" type="audio/mp3">
+    </audio>
 
     <div class="container">
         <!-- Header -->
         <header>
-            <div class="terminal-prompt">Welcome !</div>
+            <div class="terminal-prompt">root@kingshuk:~$ ./welcome.sh</div>
             <h1>KINGSHUK CHATTERJEE</h1>
             <div class="tagline">Elegance in code, clarity in design, beauty in form.</div>
         </header>
@@ -265,7 +276,7 @@
 ╚═══════════════════════════════════════╝</div>
             <p>© 2025 Kingshuk Chatterjee – All Rights Reserved</p>
             <p style="color: var(--neon-cyan); font-size: 12px; margin-top: 10px;">
-                System Status: ONLINE | Version: 2.0.0 | Last Updated: 2025.11.22
+                System Status: ONLINE | Version: 2.0.3 | Last Updated: 2025.11.22
             </p>
         </footer>
     </div>
