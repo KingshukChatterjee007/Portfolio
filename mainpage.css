@@ -69,18 +69,7 @@ html {
     will-change: contents;
 }
 
-/* Matrix Rain Canvas - LOWERED OPACITY */
-#matrix-rain {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 0; /* Visible above background */
-    pointer-events: none;
-    opacity: 0.15; /* Reduced to 15% for a very subtle effect */
-    mix-blend-mode: screen; 
-}
+/* REMOVED MATRIX RAIN CSS */
 
 body {
     font-family: 'IBM Plex Mono', monospace;
