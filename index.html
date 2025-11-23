@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="mainpage.css">
 </head>
 <body>
+    <!-- Loading Screen -->
     <div id="loading-screen">
         <div class="boot-text" style="animation-delay: 0s;">NEURAL LINK INITIATED...</div>
         <div class="boot-text" style="animation-delay: 0.3s;">LOADING ASSETS...</div>
@@ -15,6 +16,7 @@
         <div class="boot-text" style="animation-delay: 0.9s;">SYSTEM READY.</div>
     </div>
 
+    <!-- Music Toggle & Audio Source -->
     <div class="music-toggle" onclick="toggleMusic()">
         <div class="music-bars">
             <div class="bar"></div>
@@ -24,19 +26,23 @@
         <span id="music-label">AUDIO OFF</span>
     </div>
     
-    <audio id="bg-music" loop crossorigin="anonymous">
+    <audio id="bg-music" loop>
         <source src="cyberpunk_music.mp3" type="audio/mp3">
     </audio>
 
+    <!-- Background Effects -->
+    <canvas id="matrix-rain"></canvas>
     <canvas id="audio-visualizer"></canvas>
 
     <div class="container">
+        <!-- Header -->
         <header>
             <div class="terminal-prompt">welcome</div>
             <h1>KINGSHUK CHATTERJEE</h1>
             <div class="tagline">Elegance in code, clarity in design, beauty in form.</div>
         </header>
 
+        <!-- Navigation -->
         <nav>
             <a href="#about">ABOUT.SYS</a>
             <a href="#projects">PROJECTS.DIR</a>
@@ -45,12 +51,13 @@
             <a href="#contact">CONTACT.EXE</a>
         </nav>
 
+        <!-- About Section -->
         <section id="about" data-section="ABOUT.SYS">
             <h2>:: Neural Profile ::</h2>
             <div class="about-grid">
                 <div class="about-text">
                     <p>
-                        I am Kingshuk Chatterjee, a multidisciplinary designer and developer based in Bhubaneswar, India, working at the intersection of technology and visual craft. As an Automotive Designer and Poster Artist at Slipstream Studios, I create structured and high-fidelity visual compositions rooted in both engineering clarity and artistic discipline.
+                        I am Kingshuk Chatterjee, a multidisciplinary designer and developer based in Mumbai, India, working at the intersection of technology and visual craft. As an Automotive Designer and Poster Artist at Slipstream Studios, I create structured and high-fidelity visual compositions rooted in both engineering clarity and artistic discipline.
                     </p>
                     <p>
                         My professional focus spans UX/UI design, data visualisation, machine learning, and automotive creative work, supported by an IBM Certification in Python for AI and Application Development. I have developed projects ranging from stock-market forecasting systems to 3D LiDAR visualisation tools, each driven by a commitment to precision, functionality, and lasting impact.
@@ -58,33 +65,58 @@
                     <p>
                         Beyond my technical practice, I engage in mentoring, speaking at university events, and contributing to open-source initiatives, guided by a belief in continuous learning and purposeful design.
                     </p>
+                </div>
+                
+                <!-- REPLACED STATS BOX WITH TECH STACK -->
+                <div class="tech-stack-box">
+                    <h3>:: TECH_STACK.EXE ::</h3>
+                    
+                    <div class="stack-category">
+                        <h4 style="color: var(--neon-cyan)">> Programming Languages</h4>
+                        <div class="stack-tags">
+                            <span class="stack-tag">Python</span>
+                            <span class="stack-tag">JavaScript</span>
+                            <span class="stack-tag">HTML</span>
+                            <span class="stack-tag">CSS</span>
+                            <span class="stack-tag">SQL</span>
+                        </div>
                     </div>
-                <div class="stats-box">
-                    <h3>STATS.TXT</h3>
-                    <div class="stat-item">
-                        <span>LeetCode Easy:</span>
-                        <span>95+</span>
+
+                    <div class="stack-category">
+                        <h4 style="color: var(--neon-pink)">> Design & Creative</h4>
+                        <div class="stack-tags">
+                            <span class="stack-tag">Figma</span>
+                            <span class="stack-tag">Adobe XD</span>
+                            <span class="stack-tag">Photoshop</span>
+                            <span class="stack-tag">Blender</span>
+                            <span class="stack-tag">Canva</span>
+                            <span class="stack-tag">Premiere Pro</span>
+                        </div>
                     </div>
-                    <div class="stat-item">
-                        <span>LeetCode Medium:</span>
-                        <span>346+</span>
+
+                    <div class="stack-category">
+                        <h4 style="color: var(--neon-yellow)">> Analytics & Data</h4>
+                        <div class="stack-tags">
+                            <span class="stack-tag">PowerBI</span>
+                            <span class="stack-tag">Tableau</span>
+                            <span class="stack-tag">Excel</span>
+                        </div>
                     </div>
-                    <div class="stat-item">
-                        <span>LeetCode Hard:</span>
-                        <span>125+</span>
-                    </div>
-                    <div class="stat-item">
-                        <span>Projects:</span>
-                        <span>20+</span>
-                    </div>
-                    <div class="stat-item">
-                        <span>Location:</span>
-                        <span>Bhubaneswar, IN</span>
+
+                    <div class="stack-category">
+                        <h4 style="color: var(--neon-purple)">> Dev Tools</h4>
+                        <div class="stack-tags">
+                            <span class="stack-tag">GitHub</span>
+                            <span class="stack-tag">VS Code</span>
+                            <span class="stack-tag">MongoDB</span>
+                            <span class="stack-tag">Flask</span>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
+        <!-- Projects Section -->
         <section id="projects" data-section="PROJECTS.DIR">
             <h2>:: Featured Projects ::</h2>
             <div class="projects-grid">
@@ -152,6 +184,7 @@
             </div>
         </section>
 
+        <!-- Skills Section -->
         <section id="skills" data-section="SKILLS.DAT">
             <h2>:: Technical Arsenal ::</h2>
             <div class="skills-grid">
@@ -192,12 +225,13 @@
                 </div>
                 <div class="skill-item" data-group="code">
                     <h3>Problem Solving</h3>
-                    <p>100+ LeetCode Problems, Algorithms</p>
+                    <p>566+ LeetCode Problems, Algorithms</p>
                     <div class="skill-bar"></div>
                 </div>
             </div>
         </section>
 
+        <!-- Experience Section -->
         <section id="experience" data-section="EXPERIENCE.LOG">
             <h2>:: Career Timeline ::</h2>
             <div class="timeline">
@@ -233,6 +267,7 @@
             </div>
         </section>
 
+        <!-- Contact Section -->
         <section id="contact" data-section="CONTACT.EXE">
             <h2>:: Initialize Connection ::</h2>
             <form class="contact-form" action="https://formspree.io/f/myzlyrap" method="POST" id="contact-form">
@@ -258,27 +293,18 @@
             </div>
         </section>
 
+        <!-- Footer -->
         <footer>
             <div class="ascii-art">╔═══════════════════════════════════════╗
 ║  CRAFTED WITH CODE & CHARACTER        ║
 ╚═══════════════════════════════════════╝</div>
             <p>© 2025 Kingshuk Chatterjee – All Rights Reserved</p>
             <p style="color: var(--neon-cyan); font-size: 12px; margin-top: 10px;">
-                System Status: ONLINE | Version: 2.3.1 | Last Updated: 2025.11.23
+                System Status: ONLINE | Version: 2.4.0 | Last Updated: 2025.11.23
             </p>
         </footer>
     </div>
 
     <script src="mainpage.js"></script>
-
-    <script>
-      window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
-    </script>
-    <script defer src="/_vercel/insights/script.js"></script>
-
-    <script>
-      window.si = window.si || function () { (window.siq = window.siq || []).push(arguments); };
-    </script>
-    <script defer src="/_vercel/speed-insights/script.js"></script>
 </body>
 </html>

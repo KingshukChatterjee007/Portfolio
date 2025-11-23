@@ -28,6 +28,7 @@
 html {
     scrollbar-width: thin;
     scrollbar-color: var(--neon-cyan) var(--bg-dark);
+    scroll-behavior: smooth;
 }
 
 ::-webkit-scrollbar {
@@ -65,9 +66,10 @@ html {
     z-index: 0; 
     pointer-events: none; 
     opacity: 0.6;
+    will-change: contents;
 }
 
-/* Matrix Rain Canvas - FINAL VISIBILITY SETTING */
+/* Matrix Rain Canvas - LOWERED OPACITY */
 #matrix-rain {
     position: fixed;
     top: 0;
@@ -76,7 +78,7 @@ html {
     height: 100%;
     z-index: 0; /* Visible above background */
     pointer-events: none;
-    opacity: 0.25; /* Subtle but clearly visible */
+    opacity: 0.15; /* Reduced to 15% for a very subtle effect */
     mix-blend-mode: screen; 
 }
 
@@ -155,6 +157,7 @@ body::after {
     background: var(--bg-panel);
     border: 1px solid var(--neon-purple);
     animation: breathe 4s infinite ease-in-out;
+    will-change: box-shadow;
 }
 
 /* Loading Screen */
@@ -412,34 +415,60 @@ h2 {
     color: var(--text-main);
 }
 
-.stats-box {
+/* NEW TECH STACK STYLES (REPLACING STATS) */
+.tech-stack-box {
     background: rgba(0, 0, 0, 0.4);
     border: 1px solid var(--neon-cyan);
-    padding: 20px;
+    padding: 25px;
     box-shadow: 0 0 15px rgba(0, 243, 255, 0.1);
 }
 
-.stats-box h3 {
+.tech-stack-box h3 {
     color: var(--neon-cyan);
-    margin-bottom: 15px;
+    margin-bottom: 20px;
     font-size: 20px;
+    border-bottom: 1px dashed var(--neon-purple);
+    padding-bottom: 10px;
 }
 
-.stat-item {
+.stack-category {
+    margin-bottom: 20px;
+}
+
+.stack-category:last-child {
+    margin-bottom: 0;
+}
+
+.stack-category h4 {
+    font-size: 14px;
+    margin-bottom: 8px;
+    font-family: 'VT323', monospace;
+    letter-spacing: 1px;
+}
+
+.stack-tags {
     display: flex;
-    justify-content: space-between;
-    padding: 10px 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    color: var(--text-muted);
+    flex-wrap: wrap;
+    gap: 8px;
 }
 
-.stat-item span:last-child {
-    color: var(--neon-yellow);
-    font-weight: bold;
+.stack-tag {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--text-muted);
+    color: var(--text-main);
+    padding: 4px 10px;
+    font-size: 12px;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+    cursor: default;
 }
 
-.stat-item:last-child {
-    border-bottom: none;
+.stack-tag:hover {
+    border-color: var(--neon-cyan);
+    box-shadow: 0 0 10px var(--neon-cyan);
+    transform: translateY(-2px);
+    background: rgba(0, 243, 255, 0.1);
+    color: #fff;
 }
 
 /* Projects Grid */
