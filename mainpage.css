@@ -85,6 +85,13 @@ a, button, .music-toggle, .project-card, .skill-item, .timeline-item {
     cursor: pointer;
 }
 
+/* Project Card Link Wrapper */
+.project-card-link {
+    text-decoration: none;
+    display: block; /* Ensures the anchor wraps the card properly */
+    color: inherit; /* Inherit text color */
+}
+
 /* Scanline Effect */
 body::before {
     content: '';
@@ -139,7 +146,7 @@ body::after {
 
 .container {
     max-width: 1200px;
-    margin: 40px auto;
+    margin: 20px auto 40px auto;
     padding: 40px;
     position: relative;
     z-index: 1;
@@ -460,7 +467,7 @@ h2 {
     color: #fff;
 }
 
-/* Projects Grid */
+/* Projects Grid - INCREASED HEIGHT */
 .projects-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
@@ -476,6 +483,11 @@ h2 {
     transition: all 0.3s ease-in-out;
     cursor: pointer;
     overflow: hidden;
+    /* ADDED: Minimum height to make boxes taller */
+    min-height: 280px; 
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Pushes tags to bottom */
 }
 
 .project-card::before {
@@ -505,21 +517,22 @@ h2 {
 .project-card h3 {
     color: var(--neon-cyan);
     font-size: 24px;
-    margin-bottom: 10px;
+    margin-bottom: 15px; /* Increased margin */
     font-family: 'VT323', monospace;
 }
 
 .project-card p {
     color: var(--text-muted);
-    margin-bottom: 15px;
+    margin-bottom: 20px; /* Increased margin */
     line-height: 1.6;
+    flex-grow: 1; /* Allows text to take up available space */
 }
 
 .tech-tags {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
-    margin-top: 15px;
+    margin-top: auto; /* Pushes tags to the bottom */
 }
 
 .tech-tag {
